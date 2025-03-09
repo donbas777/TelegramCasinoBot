@@ -1,16 +1,38 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+import os
+import telebot
+from telebot import types
+from dotenv import load_dotenv
+from controllers.user_controllers import add_user, image_folder, get_balance
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+load_dotenv()
+TOKEN = os.getenv('TOKEN')
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+bot = telebot.TeleBot(TOKEN)
+
+@bot.message_handler(commands=['start'])
+def start(message):
+    chat_id = message.chat.id
+    username = message.from_user.username or "Unknown"
+    add_user(chat_id, username)
+    markup = types.InlineKeyboardMarkup()
+    balance = get_balance(chat_id)
+
+    photo_path = os.path.join(image_folder, "start_image.webp")
+    text = (
+        f"🎰 Добро пожаловать в наше эксклюзивное казино! 🎲\n\n"
+        f"🔹 Ваш ID: `{chat_id}`\n"
+        f"💰 Баланс: `{balance}` кредитов\n\n"
+        f"🚀 Испытайте удачу и сорвите крупный куш!\n\n"
+        f"📍 Выберите действие в меню ниже:"
+    )
+    with open(photo_path, "rb") as photo:
+        bot.send_photo(
+            chat_id=chat_id,
+            photo=photo,
+            caption=text,
+            reply_markup=markup,
+            parse_mode="Markdown"
+        )
+
+bot.polling(none_stop=True)
