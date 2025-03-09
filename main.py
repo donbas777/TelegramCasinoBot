@@ -5,6 +5,7 @@ from controllers.user_controllers import add_user, image_folder, get_balance
 
 
 TOKEN = os.getenv('TOKEN')
+print(TOKEN)
 
 bot = telebot.TeleBot(TOKEN)
 
