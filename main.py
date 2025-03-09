@@ -1,11 +1,9 @@
 import os
 import telebot
 from telebot import types
-from dotenv import load_dotenv
 from controllers.user_controllers import add_user, image_folder, get_balance
 
 
-load_dotenv()
 TOKEN = os.getenv('TOKEN')
 
 bot = telebot.TeleBot(TOKEN)

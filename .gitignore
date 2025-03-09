@@ -10,3 +10,4 @@ eggs/
 .idea/
 .cache/
 my_database.sqlite
+telegram_bot.py
